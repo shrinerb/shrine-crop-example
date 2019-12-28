@@ -27,7 +27,7 @@ $ bundle exec rackup
 ## How it works
 
 When the user selects an image, it gets uploaded asynchronously to temporary
-storage via Shrine's [upload enpdoint].
+storage via Shrine's [upload endpoint].
 
 Then the user is presented with a cropping UI powered by Cropper.js. Whenever
 the cropping points are moved, the cached file metadata in the hidden attachment
