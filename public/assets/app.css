@@ -1,0 +1,31 @@
+.container {
+  width: 800px;
+}
+
+.button {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.error_message {
+  color: red;
+}
+
+label {
+  margin-right: 10px;
+}
+
+.image-preview img {
+  display: block;
+  max-width: 100%;
+}
+
+.image-preview {
+  margin-bottom: 10px;
+  display: inline-block;
+  height: 300px;
+}
+
+img[src=""] {
+  visibility: hidden;
+}

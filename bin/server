@@ -1,0 +1,3 @@
+#!/bin/bash
+
+rerun --ignore 'public/*' --ignore 'views/*' -- bundle exec rackup

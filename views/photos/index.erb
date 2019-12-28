@@ -1,0 +1,22 @@
+<h1>Photos</h1>
+
+<div class="button">
+  <a href="/photos/new" class="btn btn-success">+ New Photo</a>
+</div>
+
+<table class="table">
+  <thead>
+    <th>Title</th>
+    <th>Image</th>
+    <th></th>
+  </thead>
+  <tbody>
+    <% photos.each do |photo| %>
+      <tr>
+        <td><%= photo.title %></td>
+        <td><img src="<%= photo.image_url(:small) %>" width="150" class="img-thumbnail" /></td>
+        <td><a href="/photos/<%= photo.id %>" class="btn btn-warning">Edit</a></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

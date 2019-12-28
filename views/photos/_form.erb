@@ -1,0 +1,41 @@
+<% if photo.new? %>
+  <% form_method, form_action = "POST", "/photos" %>
+<% else %>
+  <% form_method, form_action = "PUT", "/photos/#{photo.id}" %>
+<% end %>
+
+<div class="button">
+  <a href="/photos" class="btn btn-light">&larr; Back to Photos</a>
+</div>
+
+<% form photo, { action: form_action, method: "post" }, labeler: :explicit do |f| %>
+  <!-- For Rack::MethodOverride middleware -->
+  <%= f.input :hidden, name: "_method", value: form_method, obj: nil %>
+
+  <div class="form-group">
+    <%= f.input :title, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <!-- will be replaced by Uppy -->
+    <%= f.input :image,
+      type: :file,
+      attr: { accept: ImageUploader::ALLOWED_TYPES.join(",") },
+      class: "form-control" %>
+
+    <!-- for storing uploaded file data -->
+    <%= f.input :image,
+      type: :hidden,
+      error_handler: false,
+      class: "upload-data",
+      value: photo.cached_image_data %>
+  </div>
+
+  <div class="image-preview">
+    <img src="<%= photo.image_url(:medium) %>" height="300" class="rounded" \>
+  </div>
+
+  <div>
+    <input type="submit" value="Save" class="btn btn-primary" \>
+  </div>
+<% end %>

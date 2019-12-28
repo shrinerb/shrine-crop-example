@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shrine Crop Example</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Shrine demo app featuring cropping" />
+
+    <script src="https://transloadit.edgly.net/releases/uppy/v1.6.0/uppy.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.6/cropper.js"></script>
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://transloadit.edgly.net/releases/uppy/v1.6.0/uppy.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.6/cropper.css" rel="stylesheet" />
+    <link href="/assets/app.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div class="container">
+      <%= yield %>
+    </div>
+
+    <script src="/assets/app.js"></script>
+  </body>
+</html>
