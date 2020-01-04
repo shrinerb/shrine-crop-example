@@ -42,8 +42,8 @@ class ImageUploader < Shrine
   Attacher.derivatives :thumbnails do |original|
     vips = ImageProcessing::Vips.source(original)
 
-    THUMBNAILS.inject({}) do |result, (name, (width, height))|
-      result.merge! name => vips.resize_to_limit!(width, height)
+    THUMBNAILS.transform_values do |(width, height)|
+      vips.resize_to_limit!(width, height)
     end
   end
 
