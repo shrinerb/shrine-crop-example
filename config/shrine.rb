@@ -13,6 +13,7 @@ Shrine.storages = {
 Shrine.plugin :sequel
 Shrine.plugin :cached_attachment_data
 
+Shrine.plugin :pretty_location
 Shrine.plugin :determine_mime_type, analyzer: :marcel
 
 Shrine.plugin :restore_cached_data

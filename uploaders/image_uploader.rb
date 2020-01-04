@@ -7,7 +7,7 @@ class ImageUploader < Shrine
   ALLOWED_TYPES  = %w[image/jpeg image/png image/webp]
   MAX_DIMENSIONS = [5000, 5000]
 
-  plugin :store_dimensions, analyzer: :fastimage
+  plugin :store_dimensions, analyzer: :fastimage, log_subscriber: nil
   plugin :derivation_endpoint, prefix: "derivations/image"
 
   THUMBNAILS = {
@@ -26,21 +26,8 @@ class ImageUploader < Shrine
 
   # Crops original and generates thumbnails from the cropped image.
   Attacher.derivatives do |original|
-    result =      process_derivatives(:cropped,    original)
-    result.merge! process_derivatives(:thumbnails, result[:cropped])
-  end
-
-  # Generates a cropped image.
-  Attacher.derivatives :cropped do |original|
-    vips        = ImageProcessing::Vips.source(original)
-    crop_points = file["crop"].fetch_values("x", "y", "width", "height")
-
-    { cropped: vips.crop!(*crop_points) }
-  end
-
-  # Generates a set of thumbnails.
-  Attacher.derivatives :thumbnails do |original|
     vips = ImageProcessing::Vips.source(original)
+    vips = vips.crop(*file.crop_points)
 
     THUMBNAILS.transform_values do |(width, height)|
       vips.resize_to_limit!(width, height)
@@ -51,17 +38,10 @@ class ImageUploader < Shrine
   Attacher.default_url do |derivative: nil, **|
     next unless derivative && file
 
-    transformations = {}
-
-    if THUMBNAILS.key?(derivative) || derivative == :cropped
-      transformations[:crop] = file["crop"].fetch_values("x", "y", "width", "height")
-    end
-
-    if THUMBNAILS.key?(derivative)
-      transformations[:resize_to_limit] = THUMBNAILS.fetch(derivative)
-    end
-
-    file.derivation_url(:transform, shrine_class.urlsafe_serialize(transformations))
+    file.derivation_url :transform, shrine_class.urlsafe_serialize(
+      crop:            file.crop_points,
+      resize_to_limit: THUMBNAILS.fetch(derivative),
+    )
   end
 
   # Generic derivation that applies a given sequence of transformations.
@@ -70,5 +50,11 @@ class ImageUploader < Shrine
 
     vips = ImageProcessing::Vips.source(file)
     vips.apply!(transformations)
+  end
+
+  class UploadedFile
+    def crop_points
+      metadata.fetch("crop").fetch_values("x", "y", "width", "height")
+    end
   end
 end
