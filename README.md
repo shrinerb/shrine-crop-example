@@ -2,6 +2,8 @@
 
 [Roda] & [Sequel] app showing image cropping with [Shrine] and [Cropper.js].
 
+![demo screen recording](/demo.gif)
+
 ## Setup
 
 You'll need to have [libvips] installed:
